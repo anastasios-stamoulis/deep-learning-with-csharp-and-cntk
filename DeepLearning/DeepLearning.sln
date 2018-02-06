@@ -1,0 +1,93 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_02_First_Look_At_A_Neural_Network", "Ch_02_First_Look_At_A_Neural_Network\Ch_02_First_Look_At_A_Neural_Network.csproj", "{6BA97F6C-C71C-418E-B109-96D9AB98F554}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_03_Classifying_Movie_Reviews", "Ch_03_Classifying_Movie_Reviews\Ch_03_Classifying_Movie_Reviews.csproj", "{0A1E0C81-4FD9-491F-8B12-221C2BF15CB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_03_Predicting_House_Prices", "Ch_03_Predicting_House_Prices\Ch_03_Predicting_House_Prices.csproj", "{740DBBB0-1DA3-4771-B81C-AEC4792CABE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CF3A9181-1941-4E6E-8607-2ADCE675218E}"
+	ProjectSection(SolutionItems) = preProject
+		Util.cs = Util.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_04_Overfitting_and_Underfitting", "Ch_04_Overfitting_and_Underfitting\Ch_04_Overfitting_and_Underfitting.csproj", "{4E4550BE-76F2-4317-90D6-C1950AB61A12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Introduction_to_Convnets", "Ch_05_Introduction_to_Convnets\Ch_05_Introduction_to_Convnets.csproj", "{A4E153F1-A7C5-4426-A612-F8CAAC716875}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Using_Convnets_With_Small_Datasets", "Ch_05_Using_Convnets_With_Small_Datasets\Ch_05_Using_Convnets_With_Small_Datasets.csproj", "{F5140A26-46A9-4F9C-8B39-7E56562A4434}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Using_A_Pretrained_Convnet", "Ch_05_Using_A_Pretrained_Convnet\Ch_05_Using_A_Pretrained_Convnet.csproj", "{20DB921F-E93A-4CEC-8EAA-4755272B62F0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPPUtil", "CPPUtil\CPPUtil.vcxproj", "{01735315-CE4E-4F8E-88ED-330B9DC9D91F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Visualizing_Convnet_Filters", "Ch_05_Visualizing_Convnet_Filters\Ch_05_Visualizing_Convnet_Filters.csproj", "{3A25E3A4-8A55-47B7-B943-880DE21CD093}"
+	ProjectSection(ProjectDependencies) = postProject
+		{01735315-CE4E-4F8E-88ED-330B9DC9D91F} = {01735315-CE4E-4F8E-88ED-330B9DC9D91F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Class_Activation_Heatmaps", "Ch_05_Class_Activation_Heatmaps\Ch_05_Class_Activation_Heatmaps.csproj", "{3194A6AF-DA79-4553-8D96-397C6DBC208B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{01735315-CE4E-4F8E-88ED-330B9DC9D91F} = {01735315-CE4E-4F8E-88ED-330B9DC9D91F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Visualizing_Intermediate_Activations", "Ch_05_Visualizing_Intermediate_Activations\Ch_05_Visualizing_Intermediate_Activations.csproj", "{65379B33-2D38-446B-A669-8444E5BEFCD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6BA97F6C-C71C-418E-B109-96D9AB98F554}.Debug|x64.ActiveCfg = Debug|x64
+		{6BA97F6C-C71C-418E-B109-96D9AB98F554}.Debug|x64.Build.0 = Debug|x64
+		{6BA97F6C-C71C-418E-B109-96D9AB98F554}.Release|x64.ActiveCfg = Release|x64
+		{6BA97F6C-C71C-418E-B109-96D9AB98F554}.Release|x64.Build.0 = Release|x64
+		{0A1E0C81-4FD9-491F-8B12-221C2BF15CB8}.Debug|x64.ActiveCfg = Debug|x64
+		{0A1E0C81-4FD9-491F-8B12-221C2BF15CB8}.Debug|x64.Build.0 = Debug|x64
+		{0A1E0C81-4FD9-491F-8B12-221C2BF15CB8}.Release|x64.ActiveCfg = Release|x64
+		{0A1E0C81-4FD9-491F-8B12-221C2BF15CB8}.Release|x64.Build.0 = Release|x64
+		{740DBBB0-1DA3-4771-B81C-AEC4792CABE8}.Debug|x64.ActiveCfg = Debug|x64
+		{740DBBB0-1DA3-4771-B81C-AEC4792CABE8}.Debug|x64.Build.0 = Debug|x64
+		{740DBBB0-1DA3-4771-B81C-AEC4792CABE8}.Release|x64.ActiveCfg = Release|x64
+		{740DBBB0-1DA3-4771-B81C-AEC4792CABE8}.Release|x64.Build.0 = Release|x64
+		{4E4550BE-76F2-4317-90D6-C1950AB61A12}.Debug|x64.ActiveCfg = Debug|x64
+		{4E4550BE-76F2-4317-90D6-C1950AB61A12}.Debug|x64.Build.0 = Debug|x64
+		{4E4550BE-76F2-4317-90D6-C1950AB61A12}.Release|x64.ActiveCfg = Release|x64
+		{4E4550BE-76F2-4317-90D6-C1950AB61A12}.Release|x64.Build.0 = Release|x64
+		{A4E153F1-A7C5-4426-A612-F8CAAC716875}.Debug|x64.ActiveCfg = Debug|x64
+		{A4E153F1-A7C5-4426-A612-F8CAAC716875}.Debug|x64.Build.0 = Debug|x64
+		{A4E153F1-A7C5-4426-A612-F8CAAC716875}.Release|x64.ActiveCfg = Release|x64
+		{A4E153F1-A7C5-4426-A612-F8CAAC716875}.Release|x64.Build.0 = Release|x64
+		{F5140A26-46A9-4F9C-8B39-7E56562A4434}.Debug|x64.ActiveCfg = Debug|x64
+		{F5140A26-46A9-4F9C-8B39-7E56562A4434}.Debug|x64.Build.0 = Debug|x64
+		{F5140A26-46A9-4F9C-8B39-7E56562A4434}.Release|x64.ActiveCfg = Release|x64
+		{F5140A26-46A9-4F9C-8B39-7E56562A4434}.Release|x64.Build.0 = Release|x64
+		{20DB921F-E93A-4CEC-8EAA-4755272B62F0}.Debug|x64.ActiveCfg = Debug|x64
+		{20DB921F-E93A-4CEC-8EAA-4755272B62F0}.Debug|x64.Build.0 = Debug|x64
+		{20DB921F-E93A-4CEC-8EAA-4755272B62F0}.Release|x64.ActiveCfg = Release|x64
+		{20DB921F-E93A-4CEC-8EAA-4755272B62F0}.Release|x64.Build.0 = Release|x64
+		{01735315-CE4E-4F8E-88ED-330B9DC9D91F}.Debug|x64.ActiveCfg = Debug|x64
+		{01735315-CE4E-4F8E-88ED-330B9DC9D91F}.Debug|x64.Build.0 = Debug|x64
+		{01735315-CE4E-4F8E-88ED-330B9DC9D91F}.Release|x64.ActiveCfg = Release|x64
+		{01735315-CE4E-4F8E-88ED-330B9DC9D91F}.Release|x64.Build.0 = Release|x64
+		{3A25E3A4-8A55-47B7-B943-880DE21CD093}.Debug|x64.ActiveCfg = Debug|x64
+		{3A25E3A4-8A55-47B7-B943-880DE21CD093}.Debug|x64.Build.0 = Debug|x64
+		{3A25E3A4-8A55-47B7-B943-880DE21CD093}.Release|x64.ActiveCfg = Release|x64
+		{3A25E3A4-8A55-47B7-B943-880DE21CD093}.Release|x64.Build.0 = Release|x64
+		{3194A6AF-DA79-4553-8D96-397C6DBC208B}.Debug|x64.ActiveCfg = Debug|x64
+		{3194A6AF-DA79-4553-8D96-397C6DBC208B}.Debug|x64.Build.0 = Debug|x64
+		{3194A6AF-DA79-4553-8D96-397C6DBC208B}.Release|x64.ActiveCfg = Release|x64
+		{3194A6AF-DA79-4553-8D96-397C6DBC208B}.Release|x64.Build.0 = Release|x64
+		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Debug|x64.ActiveCfg = Debug|x64
+		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Debug|x64.Build.0 = Debug|x64
+		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Release|x64.ActiveCfg = Release|x64
+		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
