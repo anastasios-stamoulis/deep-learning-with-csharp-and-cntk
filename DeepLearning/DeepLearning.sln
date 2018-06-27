@@ -36,6 +36,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Class_Activation_Heat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Visualizing_Intermediate_Activations", "Ch_05_Visualizing_Intermediate_Activations\Ch_05_Visualizing_Intermediate_Activations.csproj", "{65379B33-2D38-446B-A669-8444E5BEFCD0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_06_Advanced_Usage_Of_Recurrent_Neural_Networks", "Ch_06_Advanced_Usage_Of_Recurrent_Neural_Networks\Ch_06_Advanced_Usage_Of_Recurrent_Neural_Networks.csproj", "{BF09D75F-11AB-4218-A475-244638539F24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_06_One_Hot_Encoding", "Ch_06_One_Hot_Encoding\Ch_06_One_Hot_Encoding.csproj", "{7B7BB9DF-6C8F-42C0-BA4B-4447EA35CA66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_06_Sequence_Processing_With_Convnets", "Ch_06_Sequence_Processing_With_Convnets\Ch_06_Sequence_Processing_With_Convnets.csproj", "{B3C7E3D6-AE76-466D-A570-EAD87458D561}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_06_Understanding_Recurrent_Neural_Networks", "Ch_06_Understanding_Recurrent_Neural_Networks\Ch_06_Understanding_Recurrent_Neural_Networks.csproj", "{F08F3516-116C-47E7-AB31-596133C3FBD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_06_Using_Word_Embeddings", "Ch_06_Using_Word_Embeddings\Ch_06_Using_Word_Embeddings.csproj", "{D181D6BD-6DC5-4F17-B195-67BFC9E3EC85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -86,6 +96,26 @@ Global
 		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Debug|x64.Build.0 = Debug|x64
 		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Release|x64.ActiveCfg = Release|x64
 		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Release|x64.Build.0 = Release|x64
+		{BF09D75F-11AB-4218-A475-244638539F24}.Debug|x64.ActiveCfg = Debug|x64
+		{BF09D75F-11AB-4218-A475-244638539F24}.Debug|x64.Build.0 = Debug|x64
+		{BF09D75F-11AB-4218-A475-244638539F24}.Release|x64.ActiveCfg = Release|x64
+		{BF09D75F-11AB-4218-A475-244638539F24}.Release|x64.Build.0 = Release|x64
+		{7B7BB9DF-6C8F-42C0-BA4B-4447EA35CA66}.Debug|x64.ActiveCfg = Debug|x64
+		{7B7BB9DF-6C8F-42C0-BA4B-4447EA35CA66}.Debug|x64.Build.0 = Debug|x64
+		{7B7BB9DF-6C8F-42C0-BA4B-4447EA35CA66}.Release|x64.ActiveCfg = Release|x64
+		{7B7BB9DF-6C8F-42C0-BA4B-4447EA35CA66}.Release|x64.Build.0 = Release|x64
+		{B3C7E3D6-AE76-466D-A570-EAD87458D561}.Debug|x64.ActiveCfg = Debug|x64
+		{B3C7E3D6-AE76-466D-A570-EAD87458D561}.Debug|x64.Build.0 = Debug|x64
+		{B3C7E3D6-AE76-466D-A570-EAD87458D561}.Release|x64.ActiveCfg = Release|x64
+		{B3C7E3D6-AE76-466D-A570-EAD87458D561}.Release|x64.Build.0 = Release|x64
+		{F08F3516-116C-47E7-AB31-596133C3FBD8}.Debug|x64.ActiveCfg = Debug|x64
+		{F08F3516-116C-47E7-AB31-596133C3FBD8}.Debug|x64.Build.0 = Debug|x64
+		{F08F3516-116C-47E7-AB31-596133C3FBD8}.Release|x64.ActiveCfg = Release|x64
+		{F08F3516-116C-47E7-AB31-596133C3FBD8}.Release|x64.Build.0 = Release|x64
+		{D181D6BD-6DC5-4F17-B195-67BFC9E3EC85}.Debug|x64.ActiveCfg = Debug|x64
+		{D181D6BD-6DC5-4F17-B195-67BFC9E3EC85}.Debug|x64.Build.0 = Debug|x64
+		{D181D6BD-6DC5-4F17-B195-67BFC9E3EC85}.Release|x64.ActiveCfg = Release|x64
+		{D181D6BD-6DC5-4F17-B195-67BFC9E3EC85}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
