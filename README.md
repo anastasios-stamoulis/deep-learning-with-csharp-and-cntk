@@ -32,7 +32,19 @@ feature maps that are output by various layers.
 [Ch_05_Visualizing_Convnet_Filters](DeepLearning/Ch_05_Visualizing_Convnet_Filters)
 finds the visual pattern that each filter responds to using gradient ascent in input space.
 
-[Ch_05_Class_Activation_Heatmaps](DeepLearning/Ch_05_Class_Activation_Heatmaps) show which part of an image a convnet focused on.  
+[Ch_05_Class_Activation_Heatmaps](DeepLearning/Ch_05_Class_Activation_Heatmaps) show which part of an image a convnet focused on.
+
+[Ch_06_One_Hot_Encoding](DeepLearning/Ch_06_One_Hot_Encoding) discusses one-hot encoding of words.
+   
+[Ch_06_Using_Word_Embeddings](DeepLearning/Ch_06_Using_Word_Embeddings) introduces the Embedding layer, and pre-trained word embeddings ([GloVe](https://nlp.stanford.edu/projects/glove/)).
+
+[Ch_06_Understanding_Recurrent_Neural_Networks](DeepLearning/Ch_06_Understanding_Recurrent_Neural_Networks) introduces LSTMs.
+
+[Ch_06_Advanced_Usage_Of_Recurrent_Neural_Networks](DeepLearning/Ch_06_Advanced_Usage_Of_Recurrent_Neural_Networks) 
+does temperature forecasting with (stacked) GRUs. 
+
+[Ch_06_Sequence_Processing_With_Convnets](DeepLearning/Ch_06_Sequence_Processing_With_Convnets) introduces Conv1D filters. 
+
 
 ## Running the examples on Windows 10
 
