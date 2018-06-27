@@ -16,7 +16,7 @@ namespace Ch_03_Classifying_Movie_Reviews {
       var plotModel = new OxyPlot.PlotModel();
       plotModel.Title = "Training and Validation Accuracy";
 
-      plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis() { Position = OxyPlot.Axes.AxisPosition.Left, Title = "Accuracy" });
+      plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis() { Position = OxyPlot.Axes.AxisPosition.Left, Title = "Accuracy", Minimum=0, Maximum=1 });
       plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis() { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Epochs" });
 
       var labels = new string[] { "Training", "Validation" };
@@ -96,10 +96,10 @@ namespace Ch_03_Classifying_Movie_Reviews {
       var pos = offset;
       var num_batches = 0;
       var epoch_evaluation_accuracy = 0.0;
-      while (pos < x_train.Length) {
-        var pos_end = Math.Min(pos + batch_size, x_train.Length);
-        var minibatch_x = Util.get_tensors(x_tensor.Shape, x_train, pos, pos_end, computeDevice);
-        var minibatch_y = Util.get_tensors(y_tensor.Shape, y_train, pos, pos_end, computeDevice);
+      while (pos < x_test.Length) {
+        var pos_end = Math.Min(pos + batch_size, x_test.Length);
+        var minibatch_x = Util.get_tensors(x_tensor.Shape, x_test, pos, pos_end, computeDevice);
+        var minibatch_y = Util.get_tensors(y_tensor.Shape, y_test, pos, pos_end, computeDevice);
         var feed_dictionary = new test_feed_t() { { x_tensor, minibatch_x }, { y_tensor, minibatch_y } };
         var minibatch_accuracy = evaluator.TestMinibatch(feed_dictionary, computeDevice);
         epoch_evaluation_accuracy += minibatch_accuracy;
