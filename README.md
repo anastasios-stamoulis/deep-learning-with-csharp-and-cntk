@@ -1,5 +1,5 @@
     
-# Deep Learning with CNTK and C#
+# Deep Learning with C# and CNTK
 
 [Keras](https://keras.io/) is a very popular Python Deep Learning library. 
 
