@@ -22,11 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Using_Convnets_With_S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Using_A_Pretrained_Convnet", "Ch_05_Using_A_Pretrained_Convnet\Ch_05_Using_A_Pretrained_Convnet.csproj", "{20DB921F-E93A-4CEC-8EAA-4755272B62F0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppExperiment", "CppExperiment\CppExperiment.vcxproj", "{9486936B-9547-47CF-8B41-3CA4BB286D1B}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPPUtil", "CPPUtil\CPPUtil.vcxproj", "{01735315-CE4E-4F8E-88ED-330B9DC9D91F}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppConsumer", "CppConsumer\CppConsumer.vcxproj", "{C447C127-EB25-439C-9247-8425CBC1ED92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Visualizing_Convnet_Filters", "Ch_05_Visualizing_Convnet_Filters\Ch_05_Visualizing_Convnet_Filters.csproj", "{3A25E3A4-8A55-47B7-B943-880DE21CD093}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -39,8 +35,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Class_Activation_Heat
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_05_Visualizing_Intermediate_Activations", "Ch_05_Visualizing_Intermediate_Activations\Ch_05_Visualizing_Intermediate_Activations.csproj", "{65379B33-2D38-446B-A669-8444E5BEFCD0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adventures", "Adventures\Adventures.csproj", "{D94B1E7C-F5E4-45C8-994A-5C1CA5E28B6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_06_One_Hot_Encoding", "Ch_06_One_Hot_Encoding\Ch_06_One_Hot_Encoding.csproj", "{7B7BB9DF-6C8F-42C0-BA4B-4447EA35CA66}"
 EndProject
@@ -88,18 +82,10 @@ Global
 		{20DB921F-E93A-4CEC-8EAA-4755272B62F0}.Debug|x64.Build.0 = Debug|x64
 		{20DB921F-E93A-4CEC-8EAA-4755272B62F0}.Release|x64.ActiveCfg = Release|x64
 		{20DB921F-E93A-4CEC-8EAA-4755272B62F0}.Release|x64.Build.0 = Release|x64
-		{9486936B-9547-47CF-8B41-3CA4BB286D1B}.Debug|x64.ActiveCfg = Debug|x64
-		{9486936B-9547-47CF-8B41-3CA4BB286D1B}.Debug|x64.Build.0 = Debug|x64
-		{9486936B-9547-47CF-8B41-3CA4BB286D1B}.Release|x64.ActiveCfg = Release|x64
-		{9486936B-9547-47CF-8B41-3CA4BB286D1B}.Release|x64.Build.0 = Release|x64
 		{01735315-CE4E-4F8E-88ED-330B9DC9D91F}.Debug|x64.ActiveCfg = Debug|x64
 		{01735315-CE4E-4F8E-88ED-330B9DC9D91F}.Debug|x64.Build.0 = Debug|x64
 		{01735315-CE4E-4F8E-88ED-330B9DC9D91F}.Release|x64.ActiveCfg = Release|x64
 		{01735315-CE4E-4F8E-88ED-330B9DC9D91F}.Release|x64.Build.0 = Release|x64
-		{C447C127-EB25-439C-9247-8425CBC1ED92}.Debug|x64.ActiveCfg = Debug|x64
-		{C447C127-EB25-439C-9247-8425CBC1ED92}.Debug|x64.Build.0 = Debug|x64
-		{C447C127-EB25-439C-9247-8425CBC1ED92}.Release|x64.ActiveCfg = Release|x64
-		{C447C127-EB25-439C-9247-8425CBC1ED92}.Release|x64.Build.0 = Release|x64
 		{3A25E3A4-8A55-47B7-B943-880DE21CD093}.Debug|x64.ActiveCfg = Debug|x64
 		{3A25E3A4-8A55-47B7-B943-880DE21CD093}.Debug|x64.Build.0 = Debug|x64
 		{3A25E3A4-8A55-47B7-B943-880DE21CD093}.Release|x64.ActiveCfg = Release|x64
@@ -112,10 +98,6 @@ Global
 		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Debug|x64.Build.0 = Debug|x64
 		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Release|x64.ActiveCfg = Release|x64
 		{65379B33-2D38-446B-A669-8444E5BEFCD0}.Release|x64.Build.0 = Release|x64
-		{D94B1E7C-F5E4-45C8-994A-5C1CA5E28B6A}.Debug|x64.ActiveCfg = Debug|x64
-		{D94B1E7C-F5E4-45C8-994A-5C1CA5E28B6A}.Debug|x64.Build.0 = Debug|x64
-		{D94B1E7C-F5E4-45C8-994A-5C1CA5E28B6A}.Release|x64.ActiveCfg = Release|x64
-		{D94B1E7C-F5E4-45C8-994A-5C1CA5E28B6A}.Release|x64.Build.0 = Release|x64
 		{7B7BB9DF-6C8F-42C0-BA4B-4447EA35CA66}.Debug|x64.ActiveCfg = Debug|x64
 		{7B7BB9DF-6C8F-42C0-BA4B-4447EA35CA66}.Debug|x64.Build.0 = Debug|x64
 		{7B7BB9DF-6C8F-42C0-BA4B-4447EA35CA66}.Release|x64.ActiveCfg = Release|x64
