@@ -49,7 +49,7 @@ for (int i = 0; i < sentences.Count; i++) {
 }
 ```
 
-The language model will learns to predict the next character, given a sequence of previous characters. 
+The language model will learn to predict the next character, given a sequence of previous characters. 
 
 As in the previous chapters, we'll create the model in Python, and load it in C# for the
 training. 
