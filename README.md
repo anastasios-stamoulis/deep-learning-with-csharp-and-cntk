@@ -1,5 +1,5 @@
-
-# Deep Learning with C# and CNTK
+    
+# Deep Learning with CNTK and C#
 
 [Keras](https://keras.io/) is a very popular Python Deep Learning library. 
 
@@ -43,7 +43,9 @@ finds the visual pattern that each filter responds to using gradient ascent in i
 [Ch_06_Advanced_Usage_Of_Recurrent_Neural_Networks](DeepLearning/Ch_06_Advanced_Usage_Of_Recurrent_Neural_Networks) 
 does temperature forecasting with (stacked) GRUs. 
 
-[Ch_06_Sequence_Processing_With_Convnets](DeepLearning/Ch_06_Sequence_Processing_With_Convnets) introduces Conv1D filters. 
+[Ch_06_Sequence_Processing_With_Convnets](DeepLearning/Ch_06_Sequence_Processing_With_Convnets) introduces Conv1D filters.
+
+[Ch_08_Text_Generation_With_LSTM](DeepLearning/Ch_08_Text_Generation_With_LSTM) implements character-level LSTM text generation.  
 
 
 ## Running the examples on Windows 10
