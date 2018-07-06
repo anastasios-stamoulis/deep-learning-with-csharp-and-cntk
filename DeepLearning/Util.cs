@@ -709,11 +709,13 @@ namespace DeepLearningWithCNTK {
   }
 
   abstract class TrainingEngine {
-    public enum LossFunctionType { BinaryCrossEntropy, MSE };
-    public enum AccuracyFunctionType { BinaryAccuracy, Same};
+    public enum LossFunctionType { BinaryCrossEntropy, MSE, CrossEntropyWithSoftmax, CrossEntropyWithSoftmaxWithOneHotEncodedLabel, Custom };
+    public enum AccuracyFunctionType { BinaryAccuracy, SameAsLoss};
+    public enum MetricType { Loss, Accuracy }
 
     public LossFunctionType lossFunctionType = LossFunctionType.BinaryCrossEntropy;
     public AccuracyFunctionType accuracyFunctionType = AccuracyFunctionType.BinaryAccuracy;
+    public MetricType metricType = MetricType.Accuracy;
     public double lr = 0.1;    
 
     public int num_epochs { get; set; }
@@ -744,6 +746,7 @@ namespace DeepLearningWithCNTK {
 
     protected abstract void createVariables();
     protected abstract void createModel();
+    protected virtual CNTK.Function custom_loss_function() { return null; }
 
     void assertSequenceLength() {
       if ( sequence_length==1 ) { return; }
@@ -760,11 +763,13 @@ namespace DeepLearningWithCNTK {
       switch (lossFunctionType ) {
         case LossFunctionType.BinaryCrossEntropy: loss_function = CNTK.CNTKLib.BinaryCrossEntropy(model, y); break;
         case LossFunctionType.MSE: loss_function = CNTK.CNTKLib.SquaredError(model, y); break;
+        case LossFunctionType.CrossEntropyWithSoftmax: loss_function = CNTK.CNTKLib.CrossEntropyWithSoftmax(model, y); break;
+        case LossFunctionType.Custom: loss_function = custom_loss_function(); break;
       }
 
       CNTK.Function accuracy_function = null;
       switch (accuracyFunctionType) {
-        case AccuracyFunctionType.Same: accuracy_function = loss_function; break;
+        case AccuracyFunctionType.SameAsLoss: accuracy_function = loss_function; break;
         case AccuracyFunctionType.BinaryAccuracy: accuracy_function = Util.BinaryAccuracy(model, y); break;
       }
 
@@ -784,18 +789,36 @@ namespace DeepLearningWithCNTK {
       Console.WriteLine("\nCompute Device: " + computeDevice.AsString());
       for (int epoch = 0; epoch < num_epochs; epoch++) {
         var epoch_start_time = DateTime.Now;
-        var epoch_training_accuracy = training_phase();
+        var epoch_training_metric = training_phase();
         var epoch_validation_accuracy = evaluation_phase();
         var elapsedTime = DateTime.Now.Subtract(epoch_start_time);
-        Console.WriteLine($"Epoch {epoch + 1:D2}/{num_epochs}, Elapsed time: {elapsedTime.TotalSeconds:F3} seconds. " +
-          $"Training Accuracy: {epoch_training_accuracy:F3}. Validation Accuracy: {epoch_validation_accuracy:F3}.");
-        if (scheduler.update(epoch_training_accuracy)) {
+        if (metricType == MetricType.Accuracy) {
+          Console.WriteLine($"Epoch {epoch + 1:D2}/{num_epochs}, Elapsed time: {elapsedTime.TotalSeconds:F3} seconds. " +
+            $"Training Accuracy: {epoch_training_metric:F3}. Validation Accuracy: {epoch_validation_accuracy:F3}.");
+        }
+        else {
+          Console.WriteLine($"Epoch {epoch + 1:D2}/{num_epochs}, Elapsed time: {elapsedTime.TotalSeconds:F3} seconds, Training Loss: {epoch_training_metric:F3}");
+        }
+        if (scheduler.update(epoch_training_metric)) {
           break;
         }
-        if ( (threshold!=0) && (epoch_training_accuracy<threshold) ) {
+        if ( (threshold!=0) && (epoch_training_metric<threshold) ) {
           break;
         }
       }
+    }
+
+    public IList<IList<float>> evaluate(float[][] x_data, CNTK.Function f=null) {
+      if ( f==null ) { f = model; }
+      var x_minibatch = (sequence_length == 1) ?
+        Util.get_tensors(x.Shape, x_data, 0, x_data.Length, computeDevice) :
+        Util.get_tensors_sequence(sequence_length, x.Shape, x_data, 0, x_data.Length, computeDevice);
+      var inputs = new Dictionary<CNTK.Variable, CNTK.Value>() { {x, x_minibatch } };
+      var outputs = new Dictionary<CNTK.Variable, CNTK.Value>() { { f.Output, null } };
+      f.Evaluate(inputs, outputs, computeDevice);
+      var result = outputs[f.Output];
+      var outputData = result.GetDenseData<float>(f.Output);
+      return outputData;
     }
 
     double evaluation_phase() {
@@ -834,7 +857,7 @@ namespace DeepLearningWithCNTK {
         var feed_dictionary = new Dictionary<CNTK.Variable, CNTK.Value> { { x, x_minibatch }, { y, y_minibatch } };
         bool isSweepEndInArguments = (pos_end == train_indices.Length);
         trainer.TrainMinibatch(feed_dictionary, isSweepEndInArguments, computeDevice);
-        var minibatch_metric = trainer.PreviousMinibatchEvaluationAverage();
+        var minibatch_metric =  (metricType==MetricType.Loss) ? trainer.PreviousMinibatchLossAverage() : trainer.PreviousMinibatchEvaluationAverage();
         metric += minibatch_metric * (pos_end - pos);
         pos = pos_end;
         x_minibatch.Erase();
