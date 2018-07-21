@@ -47,6 +47,8 @@ does temperature forecasting with (stacked) GRUs.
 
 [Ch_08_Text_Generation_With_LSTM](DeepLearning/Ch_08_Text_Generation_With_LSTM) implements character-level LSTM text generation.  
 
+[Ch_08_Deep_Dream](DeepLearning/Ch_08_Deep_Dream) shows how neural networks hallucinate.
+
 
 ## Running the examples on Windows 10
 

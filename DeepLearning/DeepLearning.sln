@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_06_Sequence_Processing_W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Text_Generation_With_LSTM", "Ch_08_Text_Generation_With_LSTM\Ch_08_Text_Generation_With_LSTM.csproj", "{C9A61170-7D38-4108-96A8-FAC8C46509B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Deep_Dream", "Ch_08_Deep_Dream\Ch_08_Deep_Dream.csproj", "{D24FAD90-B1BC-4C77-9787-AC6E7D1A10C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -122,6 +124,10 @@ Global
 		{C9A61170-7D38-4108-96A8-FAC8C46509B2}.Debug|x64.Build.0 = Debug|x64
 		{C9A61170-7D38-4108-96A8-FAC8C46509B2}.Release|x64.ActiveCfg = Release|x64
 		{C9A61170-7D38-4108-96A8-FAC8C46509B2}.Release|x64.Build.0 = Release|x64
+		{D24FAD90-B1BC-4C77-9787-AC6E7D1A10C4}.Debug|x64.ActiveCfg = Debug|x64
+		{D24FAD90-B1BC-4C77-9787-AC6E7D1A10C4}.Debug|x64.Build.0 = Debug|x64
+		{D24FAD90-B1BC-4C77-9787-AC6E7D1A10C4}.Release|x64.ActiveCfg = Release|x64
+		{D24FAD90-B1BC-4C77-9787-AC6E7D1A10C4}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
