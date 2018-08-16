@@ -271,7 +271,7 @@ A batch input tensor has typically 4 dimensions:
 
 This is clean, and works nice with numpy. 
 
-CNTK/C# and CNKT/C++ flip all indices, flip/tranpose matrix multiplications, and appear to be WHCN (see also https://github.com/Microsoft/CNTK/issues/186). 
+CNTK/C# and CNKT/C++ flip all indices, flip/transpose matrix multiplications, and appear to be WHCN (see also https://github.com/Microsoft/CNTK/issues/186). 
 
 However, when it comes to how actually the tensors are stored 
 in the CPU memory (before there are fed into GPU), they are stored in
