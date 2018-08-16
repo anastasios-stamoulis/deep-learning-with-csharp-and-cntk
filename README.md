@@ -49,6 +49,8 @@ does temperature forecasting with (stacked) GRUs.
 
 [Ch_08_Deep_Dream](DeepLearning/Ch_08_Deep_Dream) shows how neural networks hallucinate.
 
+[Ch_08_Neural_Style_Transfer](DeepLearning/Ch_08_Neural_Style_Transfer) applies the style of an image to another.
+
 
 ## Running the examples on Windows 10
 

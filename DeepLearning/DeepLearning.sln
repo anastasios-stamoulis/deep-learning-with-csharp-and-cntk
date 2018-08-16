@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Text_Generation_With_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Deep_Dream", "Ch_08_Deep_Dream\Ch_08_Deep_Dream.csproj", "{D24FAD90-B1BC-4C77-9787-AC6E7D1A10C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Neural_Style_Transfer", "Ch_08_Neural_Style_Transfer\Ch_08_Neural_Style_Transfer.csproj", "{B5A45F24-BEA2-4080-AC18-C85EDDDAB95B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -128,6 +130,10 @@ Global
 		{D24FAD90-B1BC-4C77-9787-AC6E7D1A10C4}.Debug|x64.Build.0 = Debug|x64
 		{D24FAD90-B1BC-4C77-9787-AC6E7D1A10C4}.Release|x64.ActiveCfg = Release|x64
 		{D24FAD90-B1BC-4C77-9787-AC6E7D1A10C4}.Release|x64.Build.0 = Release|x64
+		{B5A45F24-BEA2-4080-AC18-C85EDDDAB95B}.Debug|x64.ActiveCfg = Debug|x64
+		{B5A45F24-BEA2-4080-AC18-C85EDDDAB95B}.Debug|x64.Build.0 = Debug|x64
+		{B5A45F24-BEA2-4080-AC18-C85EDDDAB95B}.Release|x64.ActiveCfg = Release|x64
+		{B5A45F24-BEA2-4080-AC18-C85EDDDAB95B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

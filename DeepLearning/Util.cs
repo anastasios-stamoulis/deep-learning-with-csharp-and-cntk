@@ -102,23 +102,57 @@ namespace DeepLearningWithCNTK {
       [In, Out]float[] imageWithOverlayedHitmap);
   }
 
+  static class VGG19 {
+    static readonly string vgg19_filename = "VGG19_ImageNet_Caffe.model";
+    static readonly string downlink_url = "https://www.cntk.ai/Models/Caffe_Converted/VGG19_ImageNet_Caffe.model";
+    static string fullpath = null;
+
+    static string download_model_if_needed() {
+      fullpath = Util.download_model_if_needed(fullpath, vgg19_filename, downlink_url);
+      return fullpath;
+    }
+
+#if (!NO_CNTK)
+    static public CNTK.Function get_model(CNTK.Variable features_node, CNTK.DeviceDescriptor computeDevice, bool include_top=false, bool freeze=false, bool use_finetuning=false) {
+      var cloningMethod = freeze ? CNTK.ParameterCloningMethod.Freeze : CNTK.ParameterCloningMethod.Clone;
+
+      // load the original VGG19 model
+      download_model_if_needed();
+      var model = CNTK.Function.Load(fullpath, computeDevice);
+      if ( include_top ) { return model; }
+
+      var pool5_node = model.FindByName("pool5");
+      CNTK.Function cloned_model = null;
+      if (features_node == null) {
+        cloned_model = CNTK.Function.Combine(new CNTK.Variable[] { pool5_node }).Clone(cloningMethod);
+        return cloned_model;
+      }
+
+      System.Diagnostics.Debug.Assert(use_finetuning == false);
+      System.Diagnostics.Debug.Assert(model.Arguments.Count == 1);
+      var replacements = new Dictionary<CNTK.Variable, CNTK.Variable>() { {model.Arguments[0], features_node } };
+      cloned_model = CNTK.Function.Combine(new CNTK.Variable[] { pool5_node }).Clone(cloningMethod, replacements);
+      return cloned_model;
+    }
+#endif
+    /*
+    @staticmethod
+    def get_model(features_node, include_top=False, use_finetuning=False):
+
+        assert use_finetuning is False
+        cloned_model = cntk.ops.combine(pool5_node).clone(cntk.ops.CloneMethod.freeze, substitutions={data_node: features_node})
+        return cloned_model
+
+     */
+  }
+
   static class VGG16 {
     static readonly string vgg16_filename = "VGG16_ImageNet_Caffe.model";
     static readonly string downlink_url = "https://www.cntk.ai/Models/Caffe_Converted/VGG16_ImageNet_Caffe.model";
     static string fullpath = null;
 
     static public string download_model_if_needed() {
-      if (fullpath == null) {
-        fullpath = Util.fullpathForDownloadedFile(dstDir: "DownloadedModels", dstFilename: vgg16_filename);
-      }
-      if (System.IO.File.Exists(fullpath)) {
-        return fullpath;
-      }
-      var success = FromStackOverflow.FileDownloader.DownloadFile(downlink_url, fullpath, timeoutInMilliSec: 3600000);
-      if (!success) {
-        System.Console.WriteLine("There was a problem with the download of the caffe model");
-        System.Environment.Exit(1);
-      }
+      fullpath = Util.download_model_if_needed(fullpath, vgg16_filename, downlink_url);
       return fullpath;
     }
 
@@ -164,6 +198,31 @@ namespace DeepLearningWithCNTK {
   }
 
   static class Util {
+    public static string get_the_path_of_the_elephant_image() {
+      var cwd = System.IO.Directory.GetCurrentDirectory();
+      var pos = cwd.LastIndexOf("DeepLearning\\");
+      var base_path = cwd.Substring(0, pos);
+      var image_path = System.IO.Path.Combine(base_path, "DeepLearning", "Ch_05_Class_Activation_Heatmaps", "creative_commons_elephant.jpg");
+      return image_path;
+    }
+
+    public static string download_model_if_needed(string fullpath, string dstFilename, string downlink_url) {
+      System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+      if (fullpath == null) {
+        fullpath = Util.fullpathForDownloadedFile(dstDir: "DownloadedModels", dstFilename: dstFilename);
+      }
+      if (System.IO.File.Exists(fullpath)) {
+        return fullpath;
+      }
+      var success = FromStackOverflow.FileDownloader.DownloadFile(downlink_url, fullpath, timeoutInMilliSec: 3600000);
+      if (!success) {
+        System.Console.WriteLine("There was a problem with the download of the caffe model");
+        System.Environment.Exit(1);
+      }
+      return fullpath;
+    }
+
+
     public static string fullpathForDownloadedFile(string dstDir, string dstFilename) {
       var fullpath = string.Empty;
       var path = System.IO.Directory.GetCurrentDirectory();
@@ -508,38 +567,109 @@ namespace DeepLearningWithCNTK {
 
     static readonly string equalSigns =  "=============================================================================";
     static readonly string underscores = "_____________________________________________________________________________";
-    static void summary(CNTK.Function rootFunction, List<string> entries, ISet<CNTK.Function> visited) {
+    static void summary(CNTK.Function rootFunction, List<string> entries, ISet<string> visited) {
       if (visited == null) {
-        visited = new HashSet<CNTK.Function>();
+        visited = new HashSet<string>();
       }
+
       if (rootFunction.IsComposite) {
         summary(rootFunction.RootFunction, entries, visited);
         return;
       }
+
+      if ( visited.Contains(rootFunction.Uid)) {
+        return;
+      }
+      visited.Add(rootFunction.Uid);
+
       var numParameters = 0;
       foreach (var rootInput in rootFunction.Inputs) {
-        if (rootInput.IsParameter) {
+        if (rootInput.IsParameter && !rootInput.IsConstant) {
           numParameters += rootInput.Shape.TotalSize;
         }
-        if (visited.Contains(rootInput.Owner) || (rootInput.Owner==null)) { continue; }
+        if ((rootInput.Owner == null) || visited.Contains(rootInput.Owner.Uid) ) { continue; }
         summary(rootInput.Owner, entries, visited);
       }
-      var line = $"{rootFunction.Name,-29}{rootFunction.Output.Shape.AsString(),-26}{numParameters}";
-      entries.Add(line);
+      for (int i = 0; i < rootFunction.Outputs.Count; i++) {
+        var line = $"{rootFunction.Name,-29}{rootFunction.Outputs[i].Shape.AsString(),-26}{numParameters}";
+        entries.Add(line);
+      }
       entries.Add(underscores);
+    }
+
+    public static string shape_desc(CNTK.Variable node) {
+      var static_shape = node.Shape.AsString();
+      var dyn_axes = node.DynamicAxes;
+      var dyn_axes_description = (dyn_axes.Count == 1) ? "[#]" : "[*, #]";
+      return $"({static_shape}, {dyn_axes_description})";
+    }
+
+    public static List<string> detailed_summary(CNTK.Function root, bool print=true) {
+      // This is based on the cntk.logging.graph.plot, but without the actual plotting part
+      // Walks through every node of the graph starting at ``root``, creates a network graph, and returns a network description
+      var model = new List<string>();
+      root = root.RootFunction;
+      var root_uid = root.Uid;
+      var stack = new Stack<object>();
+      stack.Push(root);
+      var visited = new HashSet<string>();
+      var primitive_op_map = new Dictionary<string, string>() {
+        { "Plus", "+" },
+        { "Minus", "-" },
+        { "ElementTimes", "*" },
+        { "Times", "@" } };
+      var function_nodes = new Dictionary<string, string>();
+      while (stack.Count>0) {
+        var popped = stack.Pop();
+        if (popped is CNTK.Variable) {
+          var v = (CNTK.Variable)popped;
+          if (v.IsOutput) {
+            stack.Push(v.Owner);
+          }
+          continue;
+        }
+        if ( popped is IList<CNTK.Variable> ) {
+          foreach(var pv in (IList<CNTK.Variable>)popped ) {
+            stack.Push(pv);
+          }
+          continue;
+        }
+        var node = (CNTK.Function)popped;
+        if (visited.Contains(node.Uid)) { continue; }
+        node = node.RootFunction;
+        stack.Push(node.RootFunction.Inputs);
+        var line = new System.Text.StringBuilder(node.OpName);
+        line.Append("(");
+        for (int i=0; i<node.Inputs.Count; i++) {
+          var input = node.Inputs[i];
+          if (node.IsBlock && input.IsConstant) { continue; }
+          line.Append(input.Uid);
+          if ( i!=(node.Inputs.Count-1)) {
+            line.Append(", ");
+          }
+        }
+        line.Append(") -> ");
+        foreach(var v in node.Outputs) {
+          model.Add(line.ToString() + node.Uid + "\t" + shape_desc(v));
+        }
+        visited.Add(node.Uid);
+      }
+      model.Reverse();
+      
+      if (print) {
+        for (int i=0; i<model.Count; i++) {
+          Console.WriteLine(model[i]);
+        }
+      }
+      return model;
     }
 
     public static void summary(CNTK.Function rootFunction) {
       var entries = new List<string>();
-
-      
-
       entries.Add(underscores);
       entries.Add("Layer (type)                 Output Shape              Trainable Parameters #");
       entries.Add(equalSigns);
-
       summary(rootFunction, entries, null);
-      
       foreach(var v in entries) {
         Console.WriteLine(v);
       }
@@ -576,7 +706,9 @@ namespace DeepLearningWithCNTK {
     static public void log_number_of_parameters(CNTK.Function model) {
       Console.WriteLine("\nModel Summary");
       Console.WriteLine("\tInput = " + model.Arguments[0].Shape.AsString());
-      Console.WriteLine("\tOutput = " + model.Output.Shape.AsString());
+      for (int i = 0; i < model.Outputs.Count; i++) {
+        Console.WriteLine("\tOutput = " + model.Outputs[i].Shape.AsString());
+      }
       Console.WriteLine("");
    
       var numParameters = 0;
@@ -722,9 +854,9 @@ namespace DeepLearningWithCNTK {
     public int batch_size { get; set; }
     public int sequence_length { get; set; } = 1;
     public readonly CNTK.DeviceDescriptor computeDevice;
-    public CNTK.Function model;
-    protected CNTK.Variable x;
-    protected CNTK.Variable y;
+    public CNTK.Function model=null;
+    protected CNTK.Variable x=null;
+    protected CNTK.Variable y=null;
     protected CNTK.Trainer trainer;
     protected CNTK.Evaluator evaluator;
     protected float[][] x_train;
