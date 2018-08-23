@@ -6,7 +6,7 @@ As explained in the [write-up](https://github.com/fchollet/deep-learning-with-py
 
 * "_A classical image autoencoder takes an image, 
 maps it to a latent vector space via an "encoder" 
-module, then decode it back to an output with the same dimensions 
+module, then decodes it back to an output with the same dimensions 
 as the original image, via a "decoder" module. It is then trained by using as target data the same images as the input images, meaning that the autoencoder learns to reconstruct the original inputs._"
 
 * "_A Variational Autoencoder (VAE), instead of 
@@ -122,7 +122,7 @@ and here's what we get with C# and CNTK.
 
 As a sanity check, in both cases the total number of parameters for training is the same. 
 
-To train the network, we use the MNIST dataset that we had used in
+To train the network, we use the MNIST dataset that we used in
 [Ch_02_First_Look_At_A_Neural_Network](../Ch_02_First_Look_At_A_Neural_Network). 
 
 It's interesting that when the network is trained, there's no need to feed any "labels". 
@@ -142,6 +142,6 @@ var feed_dictionary = new Dictionary<CNTK.Variable, CNTK.Value> { { input_img, x
 trainer.TrainMinibatch(feed_dictionary, false, computeDevice);
 ```
 
-Finally, here are some sample auto-generated images
+Finally, here are some sample auto-generated images:
 
 ![screenshot](generated_images.png)
