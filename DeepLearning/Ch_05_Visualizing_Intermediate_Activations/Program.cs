@@ -188,7 +188,7 @@ namespace Ch_05_Visualizing_Intermediate_Activations {
 
       var model = VGG16.get_model(result, computeDevice);
 
-      Util.PredorderTraverse(model);
+      Util.detailed_summary(model);
       var shape = model.Output.Shape;
       Console.WriteLine(shape.AsString());
     }

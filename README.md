@@ -51,6 +51,8 @@ does temperature forecasting with (stacked) GRUs.
 
 [Ch_08_Neural_Style_Transfer](DeepLearning/Ch_08_Neural_Style_Transfer) applies the style of an image to another.
 
+[Ch_08_Generating_Images_With_VAEs](DeepLearning/Ch_08_Generating_Images_With_VAEs) introduces Vartional Autoencoders. MNIST dataset.
+
 
 ## Running the examples on Windows 10
 

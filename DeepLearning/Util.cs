@@ -604,6 +604,45 @@ namespace DeepLearningWithCNTK {
       return $"({static_shape}, {dyn_axes_description})";
     }
 
+    public static IList<CNTK.Function> find_function_with_input(CNTK.Function root, CNTK.Function inputFunction) {
+      var list = new List<CNTK.Function>();
+      root = root.RootFunction;
+      inputFunction = inputFunction.RootFunction;
+      var root_uid = root.Uid;
+      var stack = new Stack<object>();
+      stack.Push(root);
+      var visited_uids = new HashSet<string>();
+      while (stack.Count > 0) {
+        var popped = stack.Pop();
+        if (popped is CNTK.Variable) {
+          var v = (CNTK.Variable)popped;
+          if (v.IsOutput) {
+            stack.Push(v.Owner);
+          }
+          continue;
+        }
+        if (popped is IList<CNTK.Variable>) {
+          foreach (var pv in (IList<CNTK.Variable>)popped) {
+            stack.Push(pv);
+          }
+          continue;
+        }
+        var node = (CNTK.Function)popped;
+        if (visited_uids.Contains(node.Uid)) { continue; }
+        node = node.RootFunction;
+        stack.Push(node.RootFunction.Inputs);
+
+        for (int i = 0; i < node.Inputs.Count; i++) {
+          var input = node.Inputs[i];
+          if (input.Uid==inputFunction.Output.Uid) {
+            list.Add(node);
+          }
+        }
+        visited_uids.Add(node.Uid);
+      }
+      return list;
+    }
+
     public static List<string> detailed_summary(CNTK.Function root, bool print=true) {
       // This is based on the cntk.logging.graph.plot, but without the actual plotting part
       // Walks through every node of the graph starting at ``root``, creates a network graph, and returns a network description
@@ -612,19 +651,16 @@ namespace DeepLearningWithCNTK {
       var root_uid = root.Uid;
       var stack = new Stack<object>();
       stack.Push(root);
-      var visited = new HashSet<string>();
-      var primitive_op_map = new Dictionary<string, string>() {
-        { "Plus", "+" },
-        { "Minus", "-" },
-        { "ElementTimes", "*" },
-        { "Times", "@" } };
-      var function_nodes = new Dictionary<string, string>();
+      var visited_uids = new HashSet<string>();
       while (stack.Count>0) {
         var popped = stack.Pop();
         if (popped is CNTK.Variable) {
           var v = (CNTK.Variable)popped;
           if (v.IsOutput) {
             stack.Push(v.Owner);
+          }
+          else if (v.IsInput) {
+            model.Add(v.AsString());
           }
           continue;
         }
@@ -635,10 +671,10 @@ namespace DeepLearningWithCNTK {
           continue;
         }
         var node = (CNTK.Function)popped;
-        if (visited.Contains(node.Uid)) { continue; }
+        if (visited_uids.Contains(node.Uid)) { continue; }
         node = node.RootFunction;
         stack.Push(node.RootFunction.Inputs);
-        var line = new System.Text.StringBuilder(node.OpName);
+        var line = new System.Text.StringBuilder($"{node.Name} : {node.OpName} ({node.Uid}) :");
         line.Append("(");
         for (int i=0; i<node.Inputs.Count; i++) {
           var input = node.Inputs[i];
@@ -650,9 +686,9 @@ namespace DeepLearningWithCNTK {
         }
         line.Append(") -> ");
         foreach(var v in node.Outputs) {
-          model.Add(line.ToString() + node.Uid + "\t" + shape_desc(v));
+          model.Add(line.ToString() + "\t" + shape_desc(v));
         }
-        visited.Add(node.Uid);
+        visited_uids.Add(node.Uid);
       }
       model.Reverse();
       
@@ -672,34 +708,6 @@ namespace DeepLearningWithCNTK {
       summary(rootFunction, entries, null);
       foreach(var v in entries) {
         Console.WriteLine(v);
-      }
-    }
-
-    public static void PredorderTraverse(CNTK.Function rootFunction, int log_level=0, ISet<CNTK.Function> visited=null) {
-      Console.WriteLine($"{rootFunction.Name} -> {rootFunction.Output.Shape.AsString()}");
-      if (visited == null) {
-        visited = new HashSet<CNTK.Function>();
-      }
-      visited.Add(rootFunction);
-
-      if (rootFunction.IsComposite) {
-        PredorderTraverse(rootFunction.RootFunction, log_level, visited);
-        return;
-      }
-
-      foreach (var rootInput in rootFunction.Inputs) {
-        if (!rootInput.IsOutput) {
-          Console.WriteLine($"\t{rootInput.Name}\t{rootInput.Shape.AsString()}");
-          if (log_level == 1) {
-            Console.WriteLine("\t\t constant:" + rootInput.IsConstant);
-            Console.WriteLine("\t\t input:" + rootInput.IsInput);
-            Console.WriteLine("\t\t parameter:" + rootInput.IsInput);
-            Console.WriteLine("\t\t placeholder:" + rootInput.IsPlaceholder);
-          }
-          continue;
-        }
-        if (visited.Contains(rootInput.Owner)) { continue; }
-        PredorderTraverse(rootInput.Owner, log_level, visited);
       }
     }
 
@@ -755,35 +763,151 @@ namespace DeepLearningWithCNTK {
       return result;
     }
 
-    static public CNTK.Function Convolution1DWithReLU(CNTK.Variable input, int num_output_channels, int filter_shape, CNTK.DeviceDescriptor device, bool use_padding = false, bool use_bias = true, string outputName = "") {
+    static T[] concat<T>(params T[][] arguments) where T: struct {
+      var list = new List<T>();
+      for (int i=0; i<arguments.Length; i++) {
+        list.AddRange(arguments[i]);
+      }
+      return list.ToArray();
+    }
+
+    static int[] make_ones(int numOnes) {
+      var ones = new int[numOnes];
+      for (int i=0; i<numOnes; i++) { ones[i] = 1; }
+      return ones;
+    }
+
+    static T[] pad_to_shape<T>(int[] filter_shape, T value) where T: struct {
+      var result = new T[filter_shape.Length];
+      for (int i=0; i<result.Length; i++) { result[i] = value; }
+      return result;
+    }
+
+    static public CNTK.Function ConvolutionTranspose(
+      CNTK.Variable x,
+      CNTK.DeviceDescriptor computeDevice,
+      int[] filter_shape,
+      int num_filters,
+      Func<CNTK.Variable, CNTK.Function> activation = null,
+      bool use_padding = true,
+      int[] strides = null,
+      bool use_bias = true,
+      int[] output_shape = null,
+      uint reduction_rank = 1,
+      int[] dilation = null,
+      uint max_temp_mem_size_in_samples = 0,
+      string name = ""
+      ) {
+      if (strides == null) { strides = new int[] { 1 }; }
+      var sharing = pad_to_shape(filter_shape, true);
+      var padding = pad_to_shape(filter_shape, use_padding);
+      if ( reduction_rank!=1 ) { throw new NotSupportedException("reduction_rank should be 1"); }
+      padding = concat(padding, new bool[] { false });
+      if ( dilation==null ) {
+        dilation = pad_to_shape(filter_shape, 1);
+      }
+      var output_channels_shape = new int[] { num_filters };
+      var kernel_shape = concat(filter_shape, output_channels_shape, new int[] { CNTK.NDShape.InferredDimension });
+      var output_full_shape = output_shape;
+      if (output_full_shape != null) {
+        output_full_shape = concat(output_shape, output_channels_shape);
+      }
+      var filter_rank = filter_shape.Length;
+      var init = CNTK.CNTKLib.GlorotUniformInitializer(CNTK.CNTKLib.DefaultParamInitScale, CNTK.CNTKLib.SentinelValueForInferParamInitRank, CNTK.CNTKLib.SentinelValueForInferParamInitRank, 1);
+      var W = new CNTK.Parameter(kernel_shape, CNTK.DataType.Float, init, computeDevice, name = "W");
+      var r = CNTK.CNTKLib.ConvolutionTranspose(
+        convolutionMap: W,
+        operand: x,
+        strides: strides,
+        sharing: new CNTK.BoolVector(sharing),
+        autoPadding: new CNTK.BoolVector(padding),
+        outputShape: output_full_shape,
+        dilation: dilation,
+        reductionRank: reduction_rank,
+        maxTempMemSizeInSamples: max_temp_mem_size_in_samples);
+      if (use_bias) {
+        var b_shape = concat(make_ones(filter_shape.Length), output_channels_shape);
+        var b = new CNTK.Parameter(b_shape, 0.0f, computeDevice, "B");
+        r = CNTK.CNTKLib.Plus(r, b);
+      }
+      if (activation != null) {
+        r = activation(r);
+      }
+      return r;
+    }
+
+    static public CNTK.Function Convolution1DWithReLU(
+      CNTK.Variable input,
+      int num_output_channels,
+      int filter_shape,
+      CNTK.DeviceDescriptor device,
+      bool use_padding = false,
+      bool use_bias = true,
+      int[] strides = null, 
+      string outputName = "") {
       var convolution_map_size = new int[] { filter_shape, CNTK.NDShape.InferredDimension, num_output_channels };
-      var rtrn = ConvolutionWithReLU(convolution_map_size, input, device, use_padding, use_bias, outputName);
+      if (strides == null) { strides = new int[] { 1 }; }
+      var rtrn = Convolution(convolution_map_size, input, device, use_padding, use_bias, strides, CNTK.CNTKLib.ReLU, outputName);
       return rtrn;
     }
 
-    static public CNTK.Function Convolution2DWithReLU(CNTK.Variable input, int num_output_channels, int[] filter_shape, CNTK.DeviceDescriptor device, bool use_padding = false, bool use_bias = true, string outputName = "") {
+    static public CNTK.Function Convolution2DWithReLU(
+      CNTK.Variable input, 
+      int num_output_channels, 
+      int[] filter_shape, 
+      CNTK.DeviceDescriptor device, 
+      bool use_padding = false, 
+      bool use_bias = true, 
+      int[] strides = null,
+      string outputName = "") {
       var convolution_map_size = new int[] { filter_shape[0], filter_shape[1], CNTK.NDShape.InferredDimension, num_output_channels };
-      var rtrn = ConvolutionWithReLU(convolution_map_size, input, device, use_padding, use_bias, outputName);
+      if ( strides==null ) { strides = new int[] { 1 }; }
+      var rtrn = Convolution(convolution_map_size, input, device, use_padding, use_bias, strides, CNTK.CNTKLib.ReLU, outputName);
       return rtrn;
     }
 
-    static CNTK.Function ConvolutionWithReLU(int[] convolution_map_size, CNTK.Variable input, CNTK.DeviceDescriptor device, bool use_padding, bool use_bias, string outputName) { 
+    static public CNTK.Function Convolution2DWithSigmoid(
+      CNTK.Variable input,
+      int num_output_channels,
+      int[] filter_shape,
+      CNTK.DeviceDescriptor device,
+      bool use_padding = false,
+      bool use_bias = true,
+      int[] strides = null,
+      string outputName = "") {
+      var convolution_map_size = new int[] { filter_shape[0], filter_shape[1], CNTK.NDShape.InferredDimension, num_output_channels };
+      if (strides == null) { strides = new int[] { 1 }; }
+      var rtrn = Convolution(convolution_map_size, input, device, use_padding, use_bias, strides, CNTK.CNTKLib.Sigmoid, outputName);
+      return rtrn;
+    }
+
+    static CNTK.Function Convolution(
+      int[] convolution_map_size, 
+      CNTK.Variable input, 
+      CNTK.DeviceDescriptor device, 
+      bool use_padding, 
+      bool use_bias, 
+      int[] strides,
+      Func<CNTK.Variable, string, CNTK.Function> activation=null,
+      string outputName="") { 
       var W = new CNTK.Parameter(
         CNTK.NDShape.CreateNDShape(convolution_map_size),
         CNTK.DataType.Float,
         CNTK.CNTKLib.GlorotUniformInitializer(CNTK.CNTKLib.DefaultParamInitScale, CNTK.CNTKLib.SentinelValueForInferParamInitRank, CNTK.CNTKLib.SentinelValueForInferParamInitRank, 1),
         device, outputName + "_W");
       
-      var result = CNTK.CNTKLib.Convolution(W, input, CNTK.NDShape.CreateNDShape(new int[] { 1 }) /*strides*/, new CNTK.BoolVector(new bool[] { true }) /* sharing */, new CNTK.BoolVector(new bool[] { use_padding }));
+      var result = CNTK.CNTKLib.Convolution(W, input, strides, new CNTK.BoolVector(new bool[] { true }) /* sharing */, new CNTK.BoolVector(new bool[] { use_padding }));
 
       if ( use_bias ) {
-        var b_shape = convolution_map_size.Length == 4 ? new int[] { 1, 1, CNTK.NDShape.InferredDimension } : new int[] { 1, CNTK.NDShape.InferredDimension };
-        var b = new CNTK.Parameter(CNTK.NDShape.CreateNDShape(b_shape), 0.0f, device, outputName + "_b");
+        var num_output_channels = convolution_map_size[convolution_map_size.Length - 1];
+        var b_shape = concat(make_ones(convolution_map_size.Length - 2), new int[] { num_output_channels });
+        var b = new CNTK.Parameter(b_shape, 0.0f, device, outputName + "_b");
         result = CNTK.CNTKLib.Plus(result, b);
       }
-           
-      result = CNTK.CNTKLib.ReLU(result, outputName);
 
+      if (activation != null) {
+        result = activation(result, outputName);
+      }
       return result;
     }
 

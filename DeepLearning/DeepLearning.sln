@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Deep_Dream", "Ch_08_D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Neural_Style_Transfer", "Ch_08_Neural_Style_Transfer\Ch_08_Neural_Style_Transfer.csproj", "{B5A45F24-BEA2-4080-AC18-C85EDDDAB95B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Generating_Images_With_VAEs", "Ch_08_Generating_Images_With_VAEs\Ch_08_Generating_Images_With_VAEs.csproj", "{EDCA28E2-9C54-41B8-A8BA-CBDC6471FEAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -134,6 +136,10 @@ Global
 		{B5A45F24-BEA2-4080-AC18-C85EDDDAB95B}.Debug|x64.Build.0 = Debug|x64
 		{B5A45F24-BEA2-4080-AC18-C85EDDDAB95B}.Release|x64.ActiveCfg = Release|x64
 		{B5A45F24-BEA2-4080-AC18-C85EDDDAB95B}.Release|x64.Build.0 = Release|x64
+		{EDCA28E2-9C54-41B8-A8BA-CBDC6471FEAC}.Debug|x64.ActiveCfg = Debug|x64
+		{EDCA28E2-9C54-41B8-A8BA-CBDC6471FEAC}.Debug|x64.Build.0 = Debug|x64
+		{EDCA28E2-9C54-41B8-A8BA-CBDC6471FEAC}.Release|x64.ActiveCfg = Release|x64
+		{EDCA28E2-9C54-41B8-A8BA-CBDC6471FEAC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

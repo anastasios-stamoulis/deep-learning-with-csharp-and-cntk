@@ -10,14 +10,6 @@ namespace Ch_08_Deep_Dream {
     const string PYTHONNET_DLL_ = "C:\\local_tools\\Python3.6.6\\Lib\\site-packages\\Python.Runtime.dll";
     const string KERAS_PORTED_CODE_ = "D:\\GitHub\\deep-learning-with-cntk-and-csharp\\Python";
 
-    static string get_the_path_of_the_elephant_image() {
-      var cwd = System.IO.Directory.GetCurrentDirectory();
-      var pos = cwd.LastIndexOf("DeepLearning\\Ch_08_Deep_Dream");
-      var base_path = cwd.Substring(0, pos);
-      var image_path = System.IO.Path.Combine(base_path, "DeepLearning", "Ch_05_Class_Activation_Heatmaps", "creative_commons_elephant.jpg");
-      return image_path;
-    }
-
     static void Main(string[] args) {
       // make sure that the hard-coded values have been set up correctly
       if ( System.IO.Directory.Exists(PYTHON_HOME_)==false ) {
@@ -33,7 +25,7 @@ namespace Ch_08_Deep_Dream {
 
       // set model_path, and image_path
       var vgg16_model_path = DeepLearningWithCNTK.VGG16.download_model_if_needed();
-      var image_path = get_the_path_of_the_elephant_image();
+      var image_path = DeepLearningWithCNTK.Util.get_the_path_of_the_elephant_image();
 
       // modify the environment variables
       var to_be_added_to_path = PYTHON_HOME_ + ";" + KERAS_PORTED_CODE_;
