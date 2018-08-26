@@ -128,7 +128,7 @@ namespace Ch_08_Generating_Images_With_VAEs {
         activation: CNTK.CNTKLib.ReLU,
         strides: new int[] { 2, 2 },
         output_shape: new int[] {28, 28});
-      model = Util.Convolution2DWithSigmoid(x, 1, new int[] { 3, 3, }, computeDevice, true);
+      model = Util.Convolution2D(x, 1, new int[] { 3, 3, }, computeDevice, use_padding: true, activation: CNTK.CNTKLib.Sigmoid);
 
       // regularization metric
       var square_ = CNTK.CNTKLib.Square(z_mean);

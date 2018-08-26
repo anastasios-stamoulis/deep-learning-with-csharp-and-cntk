@@ -213,14 +213,7 @@ namespace Ch_08_Neural_Style_Transfer {
       var outputs = new Dictionary<CNTK.Variable, CNTK.Value>() { { model.Outputs[0], null } };
       model.Evaluate(batch, outputs, computeDevice);
       var img = outputs[model.Outputs[0]].GetDenseData<float>(model.Outputs[0])[0].ToArray();
-
-      var img_data = new byte[img.Length];
-      var image_size = img_height * img_width;
-      for (int i = 0; i < img_data.Length; i += 3) {
-        img_data[i] = (byte)Math.Max(0, Math.Min(img[i / 3] + offsets[0], 255));
-        img_data[i + 1] = (byte)Math.Max(0, Math.Min(img[i / 3 + image_size] + offsets[1], 255));
-        img_data[i + 2] = (byte)Math.Max(0, Math.Min(img[i / 3 + 2 * image_size] + offsets[2], 255));
-      }
+      var img_data = Util.convert_from_channels_first(img, offsets);
       return img_data;
     }
 

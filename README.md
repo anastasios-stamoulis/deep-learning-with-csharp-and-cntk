@@ -53,6 +53,8 @@ does temperature forecasting with (stacked) GRUs.
 
 [Ch_08_Generating_Images_With_VAEs](DeepLearning/Ch_08_Generating_Images_With_VAEs) introduces Variational Autoencoders. MNIST dataset.
 
+[Ch_08_Introduction_to_GANs](DeepLearning/Ch_08_Introduction_to_GANs) creates images of fake frogs using a Generative Adversarial Network.  
+
 
 ## Running the examples on Windows 10
 

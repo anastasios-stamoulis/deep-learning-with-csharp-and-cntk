@@ -198,6 +198,25 @@ namespace DeepLearningWithCNTK {
   }
 
   static class Util {
+
+    public static byte[] convert_from_channels_first(float[] img, float[] offsets=null, float scaling=1.0f, bool invertOrder=false) {
+      if ( offsets==null ) { offsets = new float[3]; }
+      var img_data = new byte[img.Length];
+      var image_size = img.Length / 3;
+      for (int i = 0; i < img_data.Length; i += 3) {
+        img_data[i + 1] = (byte)Math.Max(0, Math.Min(scaling * img[i / 3 + image_size] + offsets[1], 255));
+        if (invertOrder) {
+          img_data[i + 2] = (byte)Math.Max(0, Math.Min(scaling * img[i / 3] + offsets[0], 255));
+          img_data[i] = (byte)Math.Max(0, Math.Min(scaling * img[i / 3 + 2 * image_size] + offsets[2], 255));
+        }
+        else {
+          img_data[i] = (byte)Math.Max(0, Math.Min(scaling * img[i / 3] + offsets[0], 255));
+          img_data[i + 2] = (byte)Math.Max(0, Math.Min(scaling * img[i / 3 + 2 * image_size] + offsets[2], 255));
+        }
+      }
+      return img_data;
+    }
+
     public static string get_the_path_of_the_elephant_image() {
       var cwd = System.IO.Directory.GetCurrentDirectory();
       var pos = cwd.LastIndexOf("DeepLearning\\");
@@ -859,14 +878,16 @@ namespace DeepLearningWithCNTK {
       bool use_padding = false, 
       bool use_bias = true, 
       int[] strides = null,
-      string outputName = "") {
+      string outputName = "",
+      bool leaky=false) {
       var convolution_map_size = new int[] { filter_shape[0], filter_shape[1], CNTK.NDShape.InferredDimension, num_output_channels };
       if ( strides==null ) { strides = new int[] { 1 }; }
-      var rtrn = Convolution(convolution_map_size, input, device, use_padding, use_bias, strides, CNTK.CNTKLib.ReLU, outputName);
+      var activation = leaky ? (Func<CNTK.Variable, string, CNTK.Function>)CNTK.CNTKLib.LeakyReLU : CNTK.CNTKLib.ReLU;
+      var rtrn = Convolution(convolution_map_size, input, device, use_padding, use_bias, strides, activation, outputName);
       return rtrn;
     }
 
-    static public CNTK.Function Convolution2DWithSigmoid(
+    static public CNTK.Function Convolution2D(
       CNTK.Variable input,
       int num_output_channels,
       int[] filter_shape,
@@ -874,10 +895,11 @@ namespace DeepLearningWithCNTK {
       bool use_padding = false,
       bool use_bias = true,
       int[] strides = null,
+      Func<CNTK.Variable, string, CNTK.Function> activation = null,
       string outputName = "") {
       var convolution_map_size = new int[] { filter_shape[0], filter_shape[1], CNTK.NDShape.InferredDimension, num_output_channels };
       if (strides == null) { strides = new int[] { 1 }; }
-      var rtrn = Convolution(convolution_map_size, input, device, use_padding, use_bias, strides, CNTK.CNTKLib.Sigmoid, outputName);
+      var rtrn = Convolution(convolution_map_size, input, device, use_padding, use_bias, strides, activation, outputName);
       return rtrn;
     }
 
@@ -1337,6 +1359,48 @@ namespace FromKeras {
 }
 
 namespace FromStackOverflow {
+
+  // https://stackoverflow.com/a/4594881
+  public sealed class GaussianRandom {
+    private bool _hasDeviate;
+    private double _storedDeviate;
+    private readonly Random _random;
+
+    public GaussianRandom(Random random = null) {
+      _random = random ?? new Random();
+    }
+
+    public float[] getFloatSamples(int numSamples) {
+      var result = new float[numSamples];
+      for (int i=0; i<numSamples; i++) {
+        result[i] = (float)NextGaussian();
+      }
+      return result;
+    }
+
+    public double NextGaussian(double mu = 0, double sigma = 1) {
+      if (sigma <= 0)
+        throw new ArgumentOutOfRangeException("sigma", "Must be greater than zero.");
+
+      if (_hasDeviate) {
+        _hasDeviate = false;
+        return _storedDeviate * sigma + mu;
+      }
+
+      double v1, v2, rSquared;
+      do {
+        v1 = 2 * _random.NextDouble() - 1;
+        v2 = 2 * _random.NextDouble() - 1;
+        rSquared = v1 * v1 + v2 * v2;
+      } while (rSquared >= 1 || rSquared == 0);
+
+      var polar = Math.Sqrt(-2 * Math.Log(rSquared) / rSquared);
+      _storedDeviate = v2 * polar;
+      _hasDeviate = true;
+      return v1 * polar * sigma + mu;
+    }
+  }
+
   // https://stackoverflow.com/a/35936119
   class FileDownloader {
     private readonly string _url;

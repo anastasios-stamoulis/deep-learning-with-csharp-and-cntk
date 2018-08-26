@@ -54,6 +54,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Neural_Style_Transfer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Generating_Images_With_VAEs", "Ch_08_Generating_Images_With_VAEs\Ch_08_Generating_Images_With_VAEs.csproj", "{EDCA28E2-9C54-41B8-A8BA-CBDC6471FEAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch_08_Introduction_to_GANs", "Ch_08_Introduction_to_GANs\Ch_08_Introduction_to_GANs.csproj", "{20ADAA34-E00E-4952-9630-C3647D7E9D8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -140,6 +142,10 @@ Global
 		{EDCA28E2-9C54-41B8-A8BA-CBDC6471FEAC}.Debug|x64.Build.0 = Debug|x64
 		{EDCA28E2-9C54-41B8-A8BA-CBDC6471FEAC}.Release|x64.ActiveCfg = Release|x64
 		{EDCA28E2-9C54-41B8-A8BA-CBDC6471FEAC}.Release|x64.Build.0 = Release|x64
+		{20ADAA34-E00E-4952-9630-C3647D7E9D8F}.Debug|x64.ActiveCfg = Debug|x64
+		{20ADAA34-E00E-4952-9630-C3647D7E9D8F}.Debug|x64.Build.0 = Debug|x64
+		{20ADAA34-E00E-4952-9630-C3647D7E9D8F}.Release|x64.ActiveCfg = Release|x64
+		{20ADAA34-E00E-4952-9630-C3647D7E9D8F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
