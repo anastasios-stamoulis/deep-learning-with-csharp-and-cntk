@@ -1,15 +1,36 @@
     
 # Deep Learning with C# and CNTK
 
+In this repository we use C# with [CNTK](https://docs.microsoft.com/en-us/cognitive-toolkit/) 
+to implement various deep learning papers, as well as 
+a port of the Keras examples in the 
+book [Deep Learning with Python](https://www.amazon.com/Deep-Learning-Python-Francois-Chollet/dp/1617294438). 
+
+The folder [`Papers`](Papers) contains the Visual Studio 2017 solution
+with the paper implementations. 
+
+The folder [`DeepLearning`](DeepLearning) contains the 
+Visual Studio 2015 solution for the book examples. 
+
+The requirements are Windows 10, and a relatively modern 
+NVIDIA graphics card.  All training examples should run 
+even without a graphics card, but... very slow. 
+
+## Papers
+
+[Capsules](Papers/Capsules) implements the paper "Dynamic Routing Between Capsules"  
+by Sara Sabour, Nicholas Frosst, and Geoffrey E Hinton. (https://arxiv.org/abs/1710.09829)  
+
+
+## Port of Deep Learning With Python
+
 [Keras](https://keras.io/) is a very popular Python Deep Learning library. 
 
-Recently, the creator of Keras, [Francois Chollet](https://twitter.com/fchollet), published the excellent book [Deep Learning with Python](https://www.amazon.com/Deep-Learning-Python-Francois-Chollet/dp/1617294438). 
+Recently, the creator of Keras, [Francois Chollet](https://twitter.com/fchollet), published 
+the excellent book [Deep Learning with Python](https://www.amazon.com/Deep-Learning-Python-Francois-Chollet/dp/1617294438). 
 
-This repository is a C# port of https://github.com/fchollet/deep-learning-with-python-notebooks using 
+The following projects are a C# port of https://github.com/fchollet/deep-learning-with-python-notebooks using 
 [CNTK](https://docs.microsoft.com/en-us/cognitive-toolkit/) as backend.
-
-
-## Examples
 
 [Ch_02_First_Look_At_A_Neural_Network](DeepLearning/Ch_02_First_Look_At_A_Neural_Network) introduces softmax and fully connected layers. MNIST data set. 
    
@@ -56,7 +77,7 @@ does temperature forecasting with (stacked) GRUs.
 [Ch_08_Introduction_to_GANs](DeepLearning/Ch_08_Introduction_to_GANs) creates images of fake frogs using a Generative Adversarial Network.  
 
 
-## Running the examples on Windows 10
+### Running the examples on Windows 10
 
 The folder [`DeepLearning`](DeepLearning) contains the Visual Studio 2015 solution. 
 
@@ -76,7 +97,7 @@ some image manipulation.
 scientific visualization.
 
 
-## Python Code
+### Python Code
 
 If you would like to experiment with the original Python code, the folder [`Python`](Python) contains the python code, as extracted from the [notebooks](https://github.com/fchollet/deep-learning-with-python-notebooks). 
 
